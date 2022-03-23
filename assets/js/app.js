@@ -1,21 +1,26 @@
 const game = document.getElementById("game");
-const dino =document.getElementById("dino");
+const dino = document.getElementById("dino");
 
+let isJumping = false;
+let isGameOver = false;
 
 function keyHandler(e) {
-    if(e.keyCode === 32){
-        // console.log("pressed");
-            jump();
+  if (e.keyCode === 32) {
+    // console.log("pressed");
+    if (!isJumping) {
+      jump();
     }
+  }
 }
 
-document.addEventListener('keyup',keyHandler)
+document.addEventListener("keyup", keyHandler);
 
 //setTimeout allows us to run a function once after the interval of time.
 //setInterval allows us to run a function repeatedly, starting after the interval of time, then repeating continuously at that interval.
 
-  // setinterval vs settimeout
-   //setTimeout->allows us to run function once after the intervaL of the time
+// setinterval vs settimeout
+
+//setTimeout
 
 // function jump() {
 
@@ -23,11 +28,10 @@ document.addEventListener('keyup',keyHandler)
 // }
 // // setTimeout(jump, 5000)
 
-// // jump  function  call after 5sec 
+// // jump  function  call after 5sec
 
 // timeOutId=setTimeout(jump ,5000 )
-// console.log(timeOutId) // in console we get the id ,with th help of id we can clearTimeOut 
-
+// console.log(timeOutId) // in console we get the id ,with th help of id we can  remove using eg: clearTimeOut(timeOutId)
 
 //setInteval
 
@@ -35,12 +39,11 @@ document.addEventListener('keyup',keyHandler)
 
 //  console.log("jumping");
 // }
-// // setInteval(jump, 1000)// in every 1s jump function call hunxa 
+// // setInteval(jump, 1000)// in every 1s jump function call hunxa
 
 // intevalId = setInteval(jump, 1000)
 
 // console.log(intervalId)
-
 
 //showing date
 // function display(){
@@ -50,68 +53,83 @@ document.addEventListener('keyup',keyHandler)
 // }
 // setInterval(display ,1000)//in every 1s time time update hunxa
 
+let position = 0;
+function jump() {
+  isJumping = true;
 
-function jump(){
-    let position=0
-   let upTimerId = setInterval(function() {
-    //move up   
-    // console.log(timerId);
-    //moving every 10 px
-    position =position + 10;
-
-    //to jump
-    //adding pixel
-    //this is string
-    dino.style.bottom= position +'px';
-
-    //moving down
-     if (position===200){
-        clearInterval(upTimerId)//200px up pachi stop hunxa 
-         console.log('down')
-                let downTimerId = setInterval(function(){
-                    position = position - 10
-                    dino.style.bottom= position + 'px';
-                    
-                    //stop moving down when position 0
-                        if (position===0)
-                    clearInterval(downTimerId)     
-                },20)
-     }
-
-   },20)//invoke in every 20 millisecond
+  let upInterval = setInterval(() => {
+    //moving up to 170px
+    if (position >= 170) {
+      //then stop in 170px
+      clearInterval(upInterval);
+      let downInterval = setInterval(() => {
+        //moving down
+        //bottom ma 0
+        if (position <= 0) {
+          //then stop at bottom 0
+          clearInterval(downInterval);
+          isJumping = false;
+        } else {
+          position = position - 20;
+          dino.style.bottom = position + "px";
+        }
+      }, 20);
+    } else {
+      position = position + 20;
+      dino.style.bottom = position + "px";
+    }
+  }, 20);
 }
-
-
 
 //obstacle
 
+function createObstacle() {
+  let randomTime = Math.random() * 5000;
+  const obstacle = document.createElement("div");
+  obstacle.classList.add("obstacle");
+  game.appendChild(obstacle);
+  let obstaclePosition = 1000;
+  obstacle.style.left = obstaclePosition + "px";
 
-function createObstacle(){
+  //moving obstacles to left
+  let timer = setInterval(() => {
+    if ((obstaclePosition > 0) & (obstaclePosition < 50) && position < 10) {
+      clearInterval(timer);
+      // alert("game over")
+      game.innerHTML = `<div id="dino"></div>`;
+      isGameOver = true;
+      document.body.innerHTML = `<div class="restart">
+            <span class="game-over" >Game Over</span>
+            <Button  class="restart-button" onclick= location.reload()>Restart</Button>
+            </div>`;
+    }
+    obstaclePosition = obstaclePosition - 8;
+    obstacle.style.left = obstaclePosition + "px";
+  }, 20);
 
-        let obstaclePosition =1200
-        const obstacle = document.createElement('div')
-        obstacle.classList.add('obstacle')
-        game.appendChild(obstacle)
-        obstacle.style.left= obstaclePosition + 'px';
+  setTimeout(createObstacle, randomTime);
+}
+createObstacle();
 
-//moving obstacles to left
-let randomTime = Math.random() * 1000
-setInterval(function(){
-    obstaclePosition=obstaclePosition-13  
-    obstacle.style.left=obstaclePosition + 'px';
-},20)
-  
+//score
+let score = 0;
+function scoreBoard() {
+  let scoreTime = setInterval(() => {
+    score++;
+    let scoring = document.getElementById("scoring");
+    scoring.innerHTML = "Your Score:" + score;
+  }, 1000);
+  console.log(scoreTime);
+}
 
-setTimeout(createObstacle,randomTime) 
+window.addEventListener("load", () => {
+  console.log("page is fully loaded");
+  scoreBoard();
+});
 
-} 
-createObstacle()
-  
 
 
-// var img = document.createElement("img");
-// img.src = "https://www.kindpng.com/picc/m/669-6699412_game-of-thrones-dragon-colours-hd-png-download.png";
-// var src = document.getElementById("header");
-// src.appendChild(img);
-
-document.body.style.backgroundImage = "url('https://www.kindpng.com/picc/m/669-6699412_game-of-thrones-dragon-colours-hd-png-download.png')";
+//btoa("hello world")
+// 'aGVsbG8gd29ybGQ='
+// atob('aGVsbG8gd29ybGQ=')
+// 'hello world'

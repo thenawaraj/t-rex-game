@@ -1,16 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;1,100;1,200;1,300;1,400&display=swap');
 
+
+
+body{
+    font-family: 'Poppins', sans-serif;
+}
 #dino{
 position: absolute;
-height: 50px;
-width: 50px;
-background-color: red;
+height: 45px;
+width: 45px;
+/* background-color: red; */
+background-image: url(../images/dino.png);
+background-size:45px 45px ;
 bottom: 0;
+      
 }
 
 .obstacle{
-    position: absolute;
-    height: 60px;
-    width: 40px;
-    background-color:black;
     bottom: 0;
+    position: absolute;
+    height: 40px;
+    width: 40px;
+    /* background-color:black; */
+    background-image: url(../images/cactus.png);
+    background-size: 40px 40px;
+}
+
+.restart{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 4rem;
+    border-radius: 15px;
+    box-shadow: 0px 8px 24px rgba(149, 157, 165, 0.2) ;
+    width: 20%;
+    height: 10vh;
+    margin: 5rem auto ;
+
+}
+
+.game-over{
+    font-size: 20px;
+}
+.restart-button{
+    border: none;
+    font-family: 'Poppins', sans-serif;
+    height:70px;
+    width: 90px;
+    padding: 8px;
+    cursor: pointer;
+    margin-top: 15px;
+
 }
